@@ -26,6 +26,7 @@ class TranslateOptions : public CompilerOptions {
     bool typeinferenceOnly = false;
     bool printLoc = false;
     bool noDump = false;
+    bool jsonOutput = false;
 
     virtual ~TranslateOptions() = default;
 

@@ -45,4 +45,11 @@ TranslateOptions::TranslateOptions() {
             return true;
         },
         "do not dump module on exit");
+    registerOption(
+        "--json-output", nullptr,
+        [this](const char *) {
+            jsonOutput = true;
+            return true;
+        },
+        "output MLIR module in JSON format");
 }

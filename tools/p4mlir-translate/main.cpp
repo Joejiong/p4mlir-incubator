@@ -52,6 +52,7 @@ limitations under the License.
 #pragma GCC diagnostic pop
 
 #include "translate.h"
+#include "json_emitter.h"
 
 namespace {
 void log_dump(const P4::IR::Node *node, const char *head) {
@@ -184,8 +185,17 @@ int main(int argc, char *const argv[]) {
     auto mod = P4::P4MLIR::toMLIR(context, program, &typeMap);
     if (!mod) return EXIT_FAILURE;
 
-    mlir::OpPrintingFlags flags;
-    if (!options.noDump) mod->print(llvm::outs(), flags.enableDebugInfo(options.printLoc));
+    // JSON output
+    if (options.jsonOutput) {
+        P4::P4MLIR::JsonEmitter emitter;
+        llvm::json::Value jsonOutput = emitter.emitModule(*mod);
+        llvm::json::OStream J(llvm::outs());
+        J.value(jsonOutput);
+        llvm::outs() << "\n";
+    } else {
+        mlir::OpPrintingFlags flags;
+        if (!options.noDump) mod->print(llvm::outs(), flags.enableDebugInfo(options.printLoc));
+    }
 
     if (P4::Log::verbose()) std::cerr << "Done." << std::endl;
     return P4::errorCount() > 0 ? EXIT_FAILURE : EXIT_SUCCESS;
