@@ -1,0 +1,3 @@
+CMD TO RUN P4HIRTOJSON:
+
+{bin}/p4mlir-export ----json-output {p4mlir-export}/bool_test.mlir > {p4mlir-export}/bool.json
