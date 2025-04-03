@@ -25,21 +25,18 @@ llvm::json::Value JsonEmitter::emitOperation(mlir::Operation *op) {
   Object opObj;
   opObj["name"] = op->getName().getStringRef().str();
   
-  // 处理操作的属性
   Object attrs;
   for (auto namedAttr : op->getAttrs()) {
     attrs[namedAttr.getName().str()] = emitAttribute(namedAttr.getValue());
   }
   opObj["attributes"] = std::move(attrs);
   
-  // 处理操作的类型
   Array resultTypes;
   for (auto type : op->getResultTypes()) {
     resultTypes.push_back(emitType(type));
   }
   opObj["result_types"] = std::move(resultTypes);
   
-  // 处理操作的区域
   Array regions;
   for (auto &region : op->getRegions()) {
     regions.push_back(emitRegion(region));
@@ -52,7 +49,6 @@ llvm::json::Value JsonEmitter::emitOperation(mlir::Operation *op) {
 llvm::json::Value JsonEmitter::emitAttribute(mlir::Attribute attr) {
   Object attrObj;
   
-  // 根据属性类型处理不同类型的属性
   if (auto strAttr = attr.dyn_cast<mlir::StringAttr>()) {
     attrObj["value"] = strAttr.getValue().str();
     attrObj["type"] = "string";
@@ -60,7 +56,6 @@ llvm::json::Value JsonEmitter::emitAttribute(mlir::Attribute attr) {
     attrObj["value"] = std::to_string(intAttr.getInt());
     attrObj["type"] = "integer";
   } else {
-    // 默认情况，尝试将属性转换为字符串
     std::string attrStr;
     llvm::raw_string_ostream os(attrStr);
     attr.print(os);
@@ -75,7 +70,6 @@ llvm::json::Value JsonEmitter::emitType(mlir::Type type) {
   Object typeObj;
   typeObj["dialect"] = type.getDialect().getNamespace().str();
   
-  // 将类型转换为字符串表示
   std::string typeStr;
   llvm::raw_string_ostream os(typeStr);
   type.print(os);
