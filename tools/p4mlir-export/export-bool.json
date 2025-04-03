@@ -1,0 +1,18 @@
+{
+    "operations": [
+        {
+            "attributes": {
+                "value": "#p4hir.bool<false>"
+            },
+            "name": "p4hir.const",
+            "operands": [],
+            "results": [
+                {
+                    "result_number": 0,
+                    "type": "op_result",
+                    "value_type": "!p4hir.bool"
+                }
+            ]
+        }
+    ]
+}
